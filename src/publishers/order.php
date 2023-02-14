@@ -30,7 +30,7 @@ class Order {
    /**
     * Retrieved response from requests
     *
-    * @var array
+    * @var array|object
     */
    public $response;
 
