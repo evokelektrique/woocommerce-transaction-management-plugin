@@ -68,8 +68,9 @@ class Order {
       $data['customer']['email'] = $order->get_billing_email();
 
       $request = new \wtm_plugin\Publishers\Order($data);
+      $response = json_decode($request->response->getBody(), true);
 
-      error_log(print_r([$request->response, json_decode($request->response->getBody(), true)], true));
+      error_log(print_r($response, true));
    }
 
 

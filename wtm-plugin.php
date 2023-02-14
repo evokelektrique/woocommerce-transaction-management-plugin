@@ -21,4 +21,7 @@ use \wtm_plugin\Plugin;
 
 require_once __DIR__ . "/vendor/autoload.php";
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 $GLOBALS["wtm-plugin"] = Plugin::get_instance();
