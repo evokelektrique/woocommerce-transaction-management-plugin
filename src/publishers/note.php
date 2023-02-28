@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) exit;
 /**
  * Handle publishing orders
  */
-class Order {
+class Note {
 
    /**
     * API Base url
@@ -61,7 +61,7 @@ class Order {
     * @return string
     */
    private function get_route() {
-      $value = $_ENV["WEBSITE_URL"] . "/api/order/create";
+      $value = $_ENV["WEBSITE_URL"] . "/api/note/create";
 
       return $value;
    }

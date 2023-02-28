@@ -66,6 +66,7 @@ class Plugin {
 
       // Initialize Listeners
       new Listeners\Order();
+      new Listeners\Note();
    }
 
    /**
@@ -113,5 +114,4 @@ class Plugin {
          load_plugin_textdomain("wtm-plugin", false, dirname(plugin_basename(__FILE__)) . '/../languages');
       });
    }
-
 }
