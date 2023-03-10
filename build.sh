@@ -4,8 +4,8 @@
 SECONDS=0 # Used for display elapsed time
 
 # Remove
-echo -e "[🗑️ ]\tRemoving old 'plugin.zip'"
-rm ./plugin.zip
+echo -e "[🗑️ ]\tRemoving old 'wtm-plugin.zip'"
+rm ./wtm-plugin.zip
 
 # Mix
 echo -e "[🚧]\tCompiling resources..."
@@ -13,11 +13,11 @@ npx mix --production >/dev/null
 
 # Archive
 echo -e "[📦]\tArchiving..."
-zip -r plugin.zip ./ \
+zip -r wtm-plugin.zip ./ \
 -x ./node_modules/\* \
 -x ./.git\* \
 -x ./resources/\* \
--x ./plugin.zip \
+-x ./wtm-plugin.zip \
 -x ./.editorconfig \
 -x ./package-lock.json \
 >/dev/null
