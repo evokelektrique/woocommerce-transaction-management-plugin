@@ -33,7 +33,6 @@ class Note {
     }
 
     $request = new \wtm_plugin\Publishers\Note($data);
-    // $response = json_decode($request->response->getBody(), true);
     $status = $request->response->getStatusCode();
 
     if($status == 404) {

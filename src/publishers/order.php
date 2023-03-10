@@ -43,6 +43,8 @@ class Order {
       $this->route = $this->get_route();
       $this->api_key = $this->get_api_key();
 
+      error_log(print_r(json_encode($data), true));
+
       $client = new Client();
       $response = $client->post($this->route, [
          'headers' => [

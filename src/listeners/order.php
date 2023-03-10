@@ -45,9 +45,13 @@ class Order {
         "items" => [],
       ],
       "notes" => [],
+      "metadata" => null
     ];
 
     $order = wc_get_order($order_id);
+
+    // Metadata
+    $data["metadata"] = self::generate_metadata($order);
 
     // Order and its items in general
     $data['order']['id'] = $order_id;
@@ -71,7 +75,7 @@ class Order {
 
     // Customer
     $user = $order->get_user();
-    $data['customer']['username'] = $user->user_login;
+    $data['customer']['username'] = $user->user_login ?? "";
     $data['customer']['first_name'] = $order->get_billing_first_name();
     $data['customer']['last_name'] = $order->get_billing_last_name();
     $data['customer']['phone'] = $order->get_billing_phone();
@@ -125,5 +129,59 @@ class Order {
     $order_notes = array_reverse(wp_list_pluck($notes, $key));
 
     return $order_notes;
+  }
+
+  private static function generate_metadata(\WC_Order $order) {
+    $whatsapp = get_post_meta($order->get_id(), '_billing_whatsapp', true);
+    $telegram = get_post_meta($order->get_id(), '_billing_telegram', true);
+    $order_dynamic_fields = [];
+    $product_dynamic_fields = [];
+
+    // Order dynamic fields
+    $order_dynamic_fields_custom_field = carbon_get_post_meta($order->get_id(), 'order_dynamic_fields');
+
+    if (!empty($order_dynamic_fields_custom_field)) {
+      foreach ($order_dynamic_fields_custom_field as $field) {
+        $order_dynamic_fields[] = [
+          "field_title" => $field["field_title"],
+          "field_email" => $field["field_email"],
+          "field_username" => $field["field_username"],
+          "field_password" => $field["field_password"],
+          "field_code" => $field["field_code"],
+          "field_date" => $field["field_date"],
+          "field_expire_days" => $field["field_expire_days"],
+        ];
+      }
+    }
+
+    foreach ($order->get_items() as $item_key => $item) {
+      $product_id = $item["product_id"];
+
+      // Product dynamic fields
+      $product_dynamic_fields_custom_field = carbon_get_post_meta($product_id, 'product_dynamic_fields');
+
+      if (empty($product_dynamic_fields_custom_field)) {
+        continue;
+      } else { // No need for an else statement but yeah whatever
+        foreach ($product_dynamic_fields_custom_field as $field) {
+          $name = str_replace(" ", "_", $field["name_en"]);
+          $product_dynamic_fields[] = [
+            "type" => $field["type"],
+            "name_fa" => $field["name_fa"],
+            "name_en" => $field["name_en"],
+            "data" => get_post_meta($order->get_id(), '_billing_' . $name, true)
+          ];
+        }
+      }
+    }
+
+    $data = [
+      "product_dynamic_fields" => $product_dynamic_fields,
+      "order_dynamic_fields" => $order_dynamic_fields,
+      "telegram" => $telegram,
+      "whatsapp" => $whatsapp
+    ];
+
+    return $data;
   }
 }
