@@ -33,12 +33,8 @@ class Note {
     }
 
     $request = new \wtm_plugin\Publishers\Note($data);
-    $response = json_decode($request->response->getBody(), true);
+    // $response = json_decode($request->response->getBody(), true);
     $status = $request->response->getStatusCode();
-
-    // error_log(print_r(json_encode($data), true));
-    // error_log(print_r($response, true));
-    // error_log(print_r($status, true));
 
     if($status == 404) {
       $new_order_data = \wtm_plugin\Listeners\Order::generate_order_data($order_id);

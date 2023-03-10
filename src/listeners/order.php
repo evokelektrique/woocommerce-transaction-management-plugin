@@ -25,12 +25,8 @@ class Order {
   public function listen_change_status($order_id, $old_status, $new_status) {
     $data = self::generate_order_data($order_id);
     $request = new \wtm_plugin\Publishers\Order($data);
-    $response = json_decode($request->response->getBody(), true);
-    $status = $request->response->getStatusCode();
-
-    // error_log(print_r(json_encode($data), true));
-    // error_log(print_r($response, true));
-    // error_log(print_r($status, true));
+    // $response = json_decode($request->response->getBody(), true);
+    // $status = $request->response->getStatusCode();
   }
 
   public static function generate_order_data($order_id) {
