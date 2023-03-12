@@ -11,7 +11,10 @@ if (!defined('ABSPATH')) exit;
 class Order {
 
   public function __construct() {
-    add_action('woocommerce_order_status_changed', [$this, "listen_change_status"], 10, 3);
+    add_action('save_post_shop_order', [$this, "listen_change_status"], 10, 3);
+    add_action('carbon_fields_post_meta_container_saved', function (int $post_id) {
+      $this->listen_change_status($post_id);
+    });
   }
 
   /**
@@ -22,11 +25,10 @@ class Order {
    * @param string $new_status
    * @return void
    */
-  public function listen_change_status($order_id, $old_status, $new_status) {
+  public function listen_change_status(int $order_id, $post = null, $update = null): void {
     $data = self::generate_order_data($order_id);
-    $request = new \wtm_plugin\Publishers\Order($data);
-    // $response = json_decode($request->response->getBody(), true);
-    // $status = $request->response->getStatusCode();
+
+    new \wtm_plugin\Publishers\Order($data);
   }
 
   public static function generate_order_data($order_id) {
